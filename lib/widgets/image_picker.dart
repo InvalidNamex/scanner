@@ -29,3 +29,33 @@ Future<String?> pickingImage(ImageSource source) async {
     return null;
   }
 }
+
+Future<List<String>?> pickingMultipleImages() async {
+  try {
+    //TODO: Pick multiple images then save them to file after that copy file paths to database
+    ImagePicker image = ImagePicker();
+    List<XFile>? pickedImages = await image.pickMultiImage();
+
+    if (pickedImages != null) {
+      List<String> filePaths = [];
+      for (XFile image in pickedImages) {
+        final pickedPath = image.path;
+        final directory = await getExternalStorageDirectory();
+        final imageDirectory = Directory(directory!.path);
+        String imageString = imageDirectory.path;
+        final path =
+            join(imageString, '${DateTime.now().millisecondsSinceEpoch}.png');
+        final bytes = File(pickedPath).readAsBytesSync();
+        final newFile = File(path);
+        await newFile.writeAsBytes(bytes);
+        filePaths.add(newFile.path);
+      }
+      return filePaths;
+    }
+    return null;
+  } catch (e) {
+    Get.snackbar('Error', e.toString());
+    print(e.toString());
+    return null;
+  }
+}

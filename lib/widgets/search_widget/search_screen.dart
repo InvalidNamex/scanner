@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../constants.dart';
-import '../../models/file_model.dart';
-import '/widgets/search_widget/search_controller.dart';
 
 class SearchScreen extends GetView<SearchController> {
   const SearchScreen({super.key});

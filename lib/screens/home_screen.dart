@@ -1,6 +1,7 @@
 import 'dart:io';
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:scanner/screens/attachment_preview_screen.dart';
 import '/controllers/home_controller.dart';
 import 'package:get/get.dart';
 import '../constants.dart';
@@ -114,14 +115,19 @@ Widget buildContent(context, HomeController controller) => Container(
                       controller.filesList[index].fileImage != ''
                           ? ElevatedButton(
                               onPressed: () {
-                                File _image = File(
-                                    controller.filesList[index].fileImage!);
-                                Get.defaultDialog(
-                                    title: 'صورة المرفق',
-                                    content: Image.file(
-                                      _image,
-                                      fit: BoxFit.fill,
-                                    ));
+                                String _x =
+                                    controller.filesList[index].fileImage!;
+                                List<File> imageFiles = [];
+                                List<String> images = [];
+                                images =
+                                    _x.substring(1, _x.length - 1).split(", ");
+                                print(controller.filesList[index].fileImage);
+                                for (String image in images) {
+                                  File imageFile = File(image);
+                                  imageFiles.add(imageFile);
+                                }
+                                Get.to(() => AttachmentPreviewScreen(
+                                    images: imageFiles));
                               },
                               child: const Text('عرض المرفق'))
                           : const Text(

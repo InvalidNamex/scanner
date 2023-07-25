@@ -168,9 +168,12 @@ Widget buildContent(context, HomeController controller) => Container(
                             child: IconButton(
                                 onPressed: () async {
                                   _source = ImageSource.gallery;
-                                  String? _x = await pickingImage(_source!);
+                                  List<String>? _x =
+                                      await pickingMultipleImages();
+                                  // String? _x = await pickingImage(_source!);
                                   if (_x != null) {
-                                    controller.fileImageController.text = _x;
+                                    controller.fileImageController.text =
+                                        _x.toString();
                                   }
                                   Get.back();
                                 },
@@ -182,9 +185,9 @@ Widget buildContent(context, HomeController controller) => Container(
                         ],
                       ));
                 },
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     Text(
                       'صورة المرفق',
                     ),

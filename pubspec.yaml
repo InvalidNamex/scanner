@@ -38,6 +38,7 @@ dependencies:
   sqflite: ^2.2.8+4
   path:
   path_provider:
+  carousel_slider:
   intl:
   image_picker:
 
