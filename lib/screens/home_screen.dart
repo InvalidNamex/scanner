@@ -1,7 +1,8 @@
 import 'dart:io';
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:scanner/screens/attachment_preview_screen.dart';
+import 'package:scanner/screens/video_player.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '/screens/attachment_preview_screen.dart';
 import '/controllers/home_controller.dart';
 import 'package:get/get.dart';
 import '../constants.dart';
@@ -94,7 +95,7 @@ Widget buildContent(context, HomeController controller) => Container(
                           fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text(
-                      ' رقم العداد: ${controller.filesList[index].counterCode}',
+                      ' رقم الملف: ${controller.filesList[index].counterCode}',
                       style: const TextStyle(fontSize: 16),
                       maxLines: 1,
                     ),
@@ -112,22 +113,49 @@ Widget buildContent(context, HomeController controller) => Container(
                           ),
                         ],
                       ),
-                      controller.filesList[index].fileImage != ''
+                      controller.filesList[index].fileLink != null &&
+                              controller.filesList[index].fileLink != ''
+                          ? ElevatedButton(
+                              onPressed: () async {
+                                String? url =
+                                    controller.filesList[index].fileLink;
+                                Uri uri = Uri.parse(url!);
+                                if (await canLaunchUrl(uri)) {
+                                  await launchUrl(uri);
+                                } else {
+                                  Get.snackbar(
+                                      'رابط معطوب', 'فشل زيارة الرابط');
+                                }
+                              },
+                              child: const Text('زيارة الرابط'))
+                          : const Text(
+                              'لا يوجد رابط لهذا الملف',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                      controller.filesList[index].fileImage != '' &&
+                              controller.filesList[index].fileImage != null
                           ? ElevatedButton(
                               onPressed: () {
                                 String _x =
                                     controller.filesList[index].fileImage!;
                                 List<File> imageFiles = [];
                                 List<String> images = [];
-                                images =
-                                    _x.substring(1, _x.length - 1).split(", ");
-                                print(controller.filesList[index].fileImage);
+                                _x = _x.replaceAll(']', '');
+                                _x = _x.replaceAll('[', '');
+                                images = _x.split(", ");
+
                                 for (String image in images) {
                                   File imageFile = File(image);
                                   imageFiles.add(imageFile);
                                 }
-                                Get.to(() => AttachmentPreviewScreen(
-                                    images: imageFiles));
+                                if (_x.substring(_x.length - 3).toLowerCase() !=
+                                    'mp4') {
+                                  Get.to(() => AttachmentPreviewScreen(
+                                      images: imageFiles));
+                                } else {
+                                  Get.to(() => const VideoPlayerWidget(),
+                                      arguments: [_x]);
+                                }
                               },
                               child: const Text('عرض المرفق'))
                           : const Text(

@@ -5,12 +5,14 @@ class FileModel {
   final String? fileImage;
   final String? fileDate;
   final String? fileSubject;
+  final String? fileLink;
   const FileModel({
     this.fileId,
     this.fileTitle,
     this.fileImage,
     this.fileDate,
     this.fileSubject,
+    this.fileLink,
     this.counterCode,
   });
   static FileModel fromJson(Map<String, dynamic> json) => FileModel(
@@ -20,6 +22,7 @@ class FileModel {
         fileImage: json['file_image'] as String?,
         fileDate: json['file_date'] as String?,
         fileSubject: json['file_subject'] as String?,
+        fileLink: json['file_link'] as String?,
       );
 
   Map<String, dynamic> toJson() => {
@@ -28,7 +31,8 @@ class FileModel {
         'file_title': fileTitle,
         'file_image': fileImage,
         'file_date': fileDate,
-        'file_subject': fileSubject
+        'file_subject': fileSubject,
+        'file_link': fileLink
       };
 
   // to store the generated id
@@ -39,6 +43,7 @@ class FileModel {
     String? fileImage,
     String? fileDate,
     String? fileSubject,
+    String? fileLink,
   }) =>
       FileModel(
         fileId: fileId ?? this.fileId,
@@ -46,6 +51,7 @@ class FileModel {
         fileImage: fileImage ?? this.fileImage,
         fileDate: fileDate ?? this.fileDate,
         fileSubject: fileSubject ?? this.fileSubject,
+        fileLink: fileSubject ?? this.fileLink,
         fileTitle: fileSubject ?? this.fileTitle,
       );
 }

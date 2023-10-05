@@ -39,9 +39,13 @@ dependencies:
   path:
   path_provider:
   carousel_slider:
+#  media_kit: ^1.1.8
+#  media_kit_video: ^1.2.1
+#  media_kit_libs_video: ^1.0.3
   intl:
+  video_player:
   image_picker:
-
+  url_launcher:
 dev_dependencies:
   flutter_test:
     sdk: flutter

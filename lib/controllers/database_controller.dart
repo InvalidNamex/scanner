@@ -36,6 +36,7 @@ class DataBaseController extends GetxController {
     file_counter_code $textType,
     file_title $textType,
     file_subject $textType,
+    file_link $textType,
     file_image $textType,
     file_date $textType
     )

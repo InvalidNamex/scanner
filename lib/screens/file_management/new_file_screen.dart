@@ -53,12 +53,12 @@ Widget buildContent(context, HomeController controller) => Container(
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.blue)),
-                  labelText: 'رقم العداد',
+                  labelText: 'رقم الملف',
                   prefixIcon: Icon(
                     Icons.access_time_outlined,
                     color: Colors.blue,
                   ),
-                  hintText: 'ادخل رقم العداد',
+                  hintText: 'ادخل رقم الملف',
                 ),
               ),
             ),
@@ -94,6 +94,24 @@ Widget buildContent(context, HomeController controller) => Container(
                     color: Colors.blue,
                   ),
                   hintText: 'قم بكتابة الموضوع',
+                ),
+              ),
+            ),
+            //file-url
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                maxLines: 1,
+                controller: controller.fileUrlController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue)),
+                  labelText: 'إضافة رابط',
+                  prefixIcon: Icon(
+                    Icons.link,
+                    color: Colors.blue,
+                  ),
+                  hintText: 'قم بإضافة رابط',
                 ),
               ),
             ),
@@ -182,6 +200,25 @@ Widget buildContent(context, HomeController controller) => Container(
                                   color: Colors.blue,
                                 )),
                           ),
+                          Container(
+                            margin: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.blue),
+                                borderRadius: BorderRadius.circular(25)),
+                            child: IconButton(
+                                onPressed: () async {
+                                  _source = ImageSource.camera;
+                                  String? _x = await pickingVideo();
+                                  if (_x != null) {
+                                    controller.fileImageController.text = _x;
+                                  }
+                                  Get.back();
+                                },
+                                icon: const Icon(
+                                  Icons.video_call_outlined,
+                                  color: Colors.blue,
+                                )),
+                          ),
                         ],
                       ));
                 },
@@ -210,6 +247,7 @@ Widget buildContent(context, HomeController controller) => Container(
                     await dbController.createFile(FileModel(
                         fileTitle: controller.fileTitleController.text,
                         fileSubject: controller.fileSubjectController.text,
+                        fileLink: controller.fileUrlController.text,
                         fileDate: DateFormat('dd-MM-yyyy')
                             .format(controller.joinDate.value),
                         fileImage: controller.fileImageController.text,
@@ -217,6 +255,7 @@ Widget buildContent(context, HomeController controller) => Container(
                     controller.fileTitleController.clear();
                     controller.fileSubjectController.clear();
                     controller.fileCounterCode.clear();
+                    controller.fileUrlController.clear();
                     controller.fileImageController.clear();
                     controller.joinDate.value = DateTime.now();
                     await controller.populateFilesList();
