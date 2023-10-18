@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:scanner/widgets/search_widget/home_tile_widget.dart';
 import '../../constants.dart';
 
 class SearchScreen extends GetView<SearchController> {
@@ -18,7 +19,7 @@ class SearchScreen extends GetView<SearchController> {
             () => DropdownButton<String>(
               dropdownColor: Colors.blue,
               value: searchController.dropdownValue.value,
-              items: <String>['رقم العداد', 'الموضوع', 'العنوان']
+              items: <String>['رقم الملف', 'الموضوع', 'العنوان']
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -72,82 +73,7 @@ Widget buildContent(context) {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: Colors.blue)),
-                child: ExpansionTile(
-                  childrenPadding: const EdgeInsets.all(5),
-                  tilePadding: const EdgeInsets.all(5),
-                  collapsedBackgroundColor: const Color(0x10000000),
-                  leading: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                          onPressed: () async {
-                            int? id =
-                                controller.searchedItemsList[index].fileId;
-                            if (id != null) {
-                              await dbController.deleteFile(id);
-                              await homeController.deleteFile(controller
-                                  .searchedItemsList[index].fileImage);
-                              await await controller.getItems();
-                            }
-                          },
-                          icon: const Icon(
-                            Icons.delete_outline,
-                            color: Colors.red,
-                          )),
-                    ],
-                  ),
-                  title: Text(
-                    'العنوان:  ${controller.searchedItemsList[index].fileTitle}',
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text(
-                    ' رقم العداد: ${controller.searchedItemsList[index].counterCode}',
-                    style: const TextStyle(fontSize: 16),
-                    maxLines: 1,
-                  ),
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          ' موضوع الملف:\n ${controller.searchedItemsList[index].fileSubject}',
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w700),
-                          textDirection: TextDirection.rtl,
-                          textAlign: TextAlign.start,
-                          maxLines: 10,
-                        ),
-                      ],
-                    ),
-                    controller.searchedItemsList[index].fileImage != ''
-                        ? ElevatedButton(
-                            onPressed: () {
-                              File image = File(controller
-                                  .searchedItemsList[index].fileImage!);
-                              Get.defaultDialog(
-                                  title: 'صورة المرفق',
-                                  content: Image.file(
-                                    image,
-                                    fit: BoxFit.fill,
-                                  ));
-                            },
-                            child: const Text('عرض المرفق'))
-                        : const Text(
-                            'لا توجد مرفقات لهذا الملف',
-                            style: TextStyle(color: Colors.red),
-                          ),
-                    Text(
-                      'التاريخ: ${controller.searchedItemsList[index].fileDate}',
-                      style: const TextStyle(
-                          color: Colors.blue,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700),
-                    )
-                  ],
-                ),
+                child: homeTileWidget(homeController, index),
               ),
             ),
     ),
@@ -156,7 +82,7 @@ Widget buildContent(context) {
 
 Widget _buildSearchField() {
   return TextField(
-    keyboardType: searchController.dropdownValue.value == 'رقم العداد'
+    keyboardType: searchController.dropdownValue.value == 'رقم الملف'
         ? TextInputType.number
         : TextInputType.text,
     style: const TextStyle(color: Colors.white),
@@ -170,9 +96,10 @@ Widget _buildSearchField() {
     ),
     onChanged: (searchedProduct) {
       RxString _value = searchController.dropdownValue;
-      if (_value.value == 'رقم العداد') {
+      if (_value.value == 'رقم الملف') {
         searchController.searchedItemsList.value = searchController.itemsList
-            .where((item) => item.counterCode!.contains(searchedProduct))
+            .where((item) =>
+                item.counterCode!.toString().contains(searchedProduct))
             .toList();
       } else if (_value.value == 'الموضوع') {
         searchController.searchedItemsList.value = searchController.itemsList
@@ -227,3 +154,80 @@ Widget _buildAppBarActions(BuildContext context) {
             color: Colors.white,
           )));
 }
+
+// ExpansionTile(
+// childrenPadding: const EdgeInsets.all(5),
+// tilePadding: const EdgeInsets.all(5),
+// collapsedBackgroundColor: const Color(0x10000000),
+// leading: Row(
+// mainAxisSize: MainAxisSize.min,
+// children: [
+// IconButton(
+// onPressed: () async {
+// int? id =
+// controller.searchedItemsList[index].fileId;
+// if (id != null) {
+// await dbController.deleteFile(id);
+// await homeController.deleteFile(controller
+//     .searchedItemsList[index].fileImage);
+// await await controller.getItems();
+// }
+// },
+// icon: const Icon(
+// Icons.delete_outline,
+// color: Colors.red,
+// )),
+// ],
+// ),
+// title: Text(
+// 'العنوان:  ${controller.searchedItemsList[index].fileTitle}',
+// style: const TextStyle(
+// color: Colors.black,
+// fontSize: 18,
+// fontWeight: FontWeight.bold),
+// ),
+// subtitle: Text(
+// ' رقم العداد: ${controller.searchedItemsList[index].counterCode}',
+// style: const TextStyle(fontSize: 16),
+// maxLines: 1,
+// ),
+// children: [
+// Row(
+// mainAxisSize: MainAxisSize.max,
+// children: [
+// Text(
+// ' موضوع الملف:\n ${controller.searchedItemsList[index].fileSubject}',
+// style: const TextStyle(
+// fontSize: 16, fontWeight: FontWeight.w700),
+// textDirection: TextDirection.rtl,
+// textAlign: TextAlign.start,
+// maxLines: 10,
+// ),
+// ],
+// ),
+// controller.searchedItemsList[index].fileImage != ''
+// ? ElevatedButton(
+// onPressed: () {
+// File image = File(controller
+//     .searchedItemsList[index].fileImage!);
+// Get.defaultDialog(
+// title: 'صورة المرفق',
+// content: Image.file(
+// image,
+// fit: BoxFit.fill,
+// ));
+// },
+// child: const Text('عرض المرفق'))
+//     : const Text(
+// 'لا توجد مرفقات لهذا الملف',
+// style: TextStyle(color: Colors.red),
+// ),
+// Text(
+// 'التاريخ: ${controller.searchedItemsList[index].fileDate}',
+// style: const TextStyle(
+// color: Colors.blue,
+// fontSize: 18,
+// fontWeight: FontWeight.w700),
+// )
+// ],
+// )

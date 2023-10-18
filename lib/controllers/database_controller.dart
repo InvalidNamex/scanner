@@ -4,8 +4,7 @@ import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:scanner/constants.dart';
-import 'package:sqflite/sqflite.dart';
-
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import '../models/file_model.dart';
 
 class DataBaseController extends GetxController {
@@ -18,12 +17,12 @@ class DataBaseController extends GetxController {
   }
 
   Future<Database> _initDB(String filePath) async {
-    final directory = await getExternalStorageDirectory();
-    final dbDirectory = Directory(directory!.path);
-    String dbString = dbDirectory.path;
+    List<Directory>? dbDirectory = await getExternalStorageDirectories();
+    String dbString = dbDirectory![0].path;
 
     final path = join(dbString, filePath);
-    return await openDatabase(path, version: 1, onCreate: _createDB);
+    final options = OpenDatabaseOptions(version: 1, onCreate: _createDB);
+    return await databaseFactoryFfi.openDatabase(path, options: options);
   }
 
   Future _createDB(Database db, int version) async {
@@ -33,7 +32,7 @@ class DataBaseController extends GetxController {
     await db.execute('''
     CREATE TABLE file_table(
     file_id $idType,
-    file_counter_code $textType,
+    file_counter_code $intType,
     file_title $textType,
     file_subject $textType,
     file_link $textType,

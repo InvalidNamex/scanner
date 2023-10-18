@@ -1,6 +1,6 @@
 class FileModel {
   final int? fileId;
-  final String? counterCode;
+  final int? counterCode;
   final String? fileTitle;
   final String? fileImage;
   final String? fileDate;
@@ -17,7 +17,7 @@ class FileModel {
   });
   static FileModel fromJson(Map<String, dynamic> json) => FileModel(
         fileId: json['file_id'] as int?,
-        counterCode: json['file_counter_code'] as String?,
+        counterCode: json['file_counter_code'] as int?,
         fileTitle: json['file_title'] as String?,
         fileImage: json['file_image'] as String?,
         fileDate: json['file_date'] as String?,
@@ -38,7 +38,7 @@ class FileModel {
   // to store the generated id
   FileModel copy({
     int? fileId,
-    String? counterCode,
+    int? counterCode,
     String? fileTitle,
     String? fileImage,
     String? fileDate,

@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:scanner/controllers/home_controller.dart';
+import '/controllers/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:scanner/widgets/image_picker.dart';
+import '/widgets/image_picker.dart';
 import '../../constants.dart';
 import '../../models/file_model.dart';
 
@@ -21,11 +21,14 @@ class NewFileScreen extends GetView<HomeController> {
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           if (constraints.maxWidth > pageWidth) {
-            return Center(
-              child: Container(
-                width: pageWidth,
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                child: buildContent(context, controller),
+            return Container(
+              color: Colors.grey,
+              child: Center(
+                child: Container(
+                  width: pageWidth,
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  child: buildContent(context, controller),
+                ),
               ),
             );
           } else {
@@ -251,7 +254,8 @@ Widget buildContent(context, HomeController controller) => Container(
                         fileDate: DateFormat('dd-MM-yyyy')
                             .format(controller.joinDate.value),
                         fileImage: controller.fileImageController.text,
-                        counterCode: controller.fileCounterCode.text));
+                        counterCode:
+                            int.parse(controller.fileCounterCode.text)));
                     controller.fileTitleController.clear();
                     controller.fileSubjectController.clear();
                     controller.fileCounterCode.clear();

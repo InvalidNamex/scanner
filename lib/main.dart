@@ -6,11 +6,9 @@ import '/screens/file_management/new_file_screen.dart';
 import '/screens/home_screen.dart';
 import '/widgets/search_widget/search_screen.dart';
 import 'bindings.dart';
-// import 'package:media_kit/media_kit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // MediaKit.ensureInitialized();
   runApp(MyApp());
 }
 
@@ -66,3 +64,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+//TODO: localization
+//TODO: backup & restore
+//TODO: login & register

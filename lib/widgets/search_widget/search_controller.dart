@@ -15,10 +15,5 @@ class SearchController extends GetxController {
 
   getItems() async {
     itemsList.value = await dbController.readFiles();
-    // for (FileModel x in itemsList) {
-    //   if (x.fileTitle != null) {
-    //     itemsTitles.add(x.fileTitle!);
-    //   }
-    // }
   }
 }
